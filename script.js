@@ -256,7 +256,7 @@ function icon(name, size) {
 const D = PORTFOLIO_DATA;
 
 function renderNav() {
-  document.getElementById('navLogo').innerHTML = `${D.initials}<span class="accent">.</span>`;
+  document.getElementById('navLogo').innerHTML = `${D.name}<span class="accent">.</span>`;
 }
 
 function renderHero() {
@@ -507,13 +507,13 @@ function initNavbar() {
 // ── Scroll reveal ────────────────────────────────────────────────
 function initScrollReveal() {
   const elements = document.querySelectorAll(
-    '.timeline-item, .project-card, .skill-category, .edu-card, .cert-item, .stat-card, .contact-card'
+    '.timeline-item, .project-card, .skill-category, .edu-card, .cert-item, .stat-card, .contact-card, .about-text, .about-stats, .subsection-title'
   );
   elements.forEach(el => el.classList.add('reveal'));
 
   function check() {
     const wh = window.innerHeight;
-    document.querySelectorAll('.reveal').forEach(el => {
+    document.querySelectorAll('.reveal, .section-title').forEach(el => {
       if (el.getBoundingClientRect().top < wh - 60) {
         el.classList.add('visible');
       }
