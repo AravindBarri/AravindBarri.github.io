@@ -563,9 +563,6 @@ function initScrollAnimations() {
   const heroGrid = document.querySelector('.hero-bg-grid');
   const scrollIndicator = document.querySelector('.scroll-indicator');
   const sections = document.querySelectorAll('.section');
-  const isMobile = window.innerWidth <= 768;
-
-  if (isMobile) return; // Disable on mobile for performance
 
   // ── Calculate sticky top for each section ──
   // If a section is taller than the viewport, set a negative top

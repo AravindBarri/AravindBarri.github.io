@@ -1239,13 +1239,12 @@ img {
 
   .section {
     padding: 70px 0;
-    position: relative;
-    border-radius: 0;
-    box-shadow: none;
+    min-height: 100vh;
+    border-radius: 16px 16px 0 0;
   }
 
   .hero {
-    position: relative;
+    min-height: 100vh;
   }
 
   .about-grid {
