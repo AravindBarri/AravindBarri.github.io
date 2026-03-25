@@ -431,6 +431,7 @@ function initPortfolio() {
   initScrollReveal();
   initStatCounter();
   initSmoothScroll();
+  initScrollAnimations();
 }
 
 // ── Typed text animation ─────────────────────────────────────────
@@ -554,6 +555,93 @@ function initStatCounter() {
   window.addEventListener('scroll', check);
   window.addEventListener('load', check);
   check();
+}
+
+// ── Apple-style scroll animations ────────────────────────────────
+function initScrollAnimations() {
+  const heroContent = document.querySelector('.hero-content');
+  const heroGrid = document.querySelector('.hero-bg-grid');
+  const scrollIndicator = document.querySelector('.scroll-indicator');
+  const sections = document.querySelectorAll('.section');
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) return; // Disable on mobile for performance
+
+  // ── Calculate sticky top for each section ──
+  // If a section is taller than the viewport, set a negative top
+  // so you scroll through ALL its content before the next section covers it.
+  function setStickyTops() {
+    const wh = window.innerHeight;
+    sections.forEach(section => {
+      const sectionHeight = section.offsetHeight;
+      if (sectionHeight > wh) {
+        // Negative top = how far past viewport the section extends
+        section.style.top = -(sectionHeight - wh) + 'px';
+      } else {
+        section.style.top = '0px';
+      }
+    });
+  }
+
+  setStickyTops();
+  window.addEventListener('resize', setStickyTops);
+
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    const scrollY = window.scrollY;
+    const wh = window.innerHeight;
+
+    // ── Hero parallax: fade out + scale down + drift up ──
+    if (heroContent) {
+      const progress = Math.min(scrollY / (wh * 0.65), 1);
+      const translateY = scrollY * 0.35;
+      const scale = 1 - progress * 0.15;
+      const opacity = Math.max(1 - progress * 1.5, 0);
+      heroContent.style.transform = `translateY(${translateY}px) scale(${scale})`;
+      heroContent.style.opacity = opacity;
+    }
+
+    // ── Hero grid parallax at slower rate for depth ──
+    if (heroGrid) {
+      heroGrid.style.transform = `translateY(${scrollY * 0.15}px)`;
+    }
+
+    // ── Fade out scroll indicator quickly ──
+    if (scrollIndicator) {
+      scrollIndicator.style.opacity = Math.max(1 - scrollY / 150, 0);
+    }
+
+    // ── Section content: scale up from 0.92 as it enters ──
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      const container = section.querySelector('.container');
+      if (!container) return;
+
+      if (rect.top < wh && rect.bottom > 0) {
+        // Section is visible
+        const enterProgress = Math.min(Math.max((wh - rect.top) / (wh * 0.45), 0), 1);
+        // Ease-out curve for smoother feel
+        const eased = 1 - Math.pow(1 - enterProgress, 3);
+        const scale = 0.92 + eased * 0.08;
+        const opacity = eased;
+        const translateY = (1 - eased) * 40;
+        container.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+        container.style.opacity = opacity;
+      }
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Run once on load
+  update();
 }
 
 // ── Smooth scroll ────────────────────────────────────────────────
