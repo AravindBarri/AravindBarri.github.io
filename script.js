@@ -401,7 +401,7 @@ function renderFooter() {
 }
 
 function renderPageMeta() {
-  document.title = `${D.name} — ${D.heroTitles[0]}`;
+  document.title = D.name;
   const meta = document.querySelector('meta[name="description"]');
   if (meta) {
     meta.content = `Portfolio of ${D.name} — ${D.heroTitles.join(', ')}. ${D.heroDescription}`;
@@ -432,6 +432,8 @@ function initPortfolio() {
   initStatCounter();
   initSmoothScroll();
   initScrollAnimations();
+  initCardTilt();
+  initMagneticButtons();
 }
 
 // ── Typed text animation ─────────────────────────────────────────
@@ -507,18 +509,39 @@ function initNavbar() {
 
 // ── Scroll reveal ────────────────────────────────────────────────
 function initScrollReveal() {
-  const elements = document.querySelectorAll(
-    '.timeline-item, .project-card, .skill-category, .edu-card, .cert-item, .stat-card, .contact-card, .about-text, .about-stats, .subsection-title'
-  );
-  elements.forEach(el => el.classList.add('reveal'));
+  // About text slides from left, stats from right
+  document.querySelectorAll('.about-text').forEach(el => el.classList.add('reveal-left'));
+  document.querySelectorAll('.about-stats').forEach(el => el.classList.add('reveal-right'));
+
+  // Timeline items alternate left/right
+  document.querySelectorAll('.timeline-item').forEach((el, i) => {
+    el.classList.add(i % 2 === 0 ? 'reveal-left' : 'reveal-right');
+  });
+
+  // Grid items scale up
+  document.querySelectorAll('.project-card, .skill-category, .edu-card, .stat-card, .contact-card').forEach(el => {
+    el.classList.add('reveal');
+  });
+
+  // Certs slide from right
+  document.querySelectorAll('.cert-item').forEach(el => el.classList.add('reveal-right'));
+
+  // Subsection title
+  document.querySelectorAll('.subsection-title').forEach(el => el.classList.add('reveal'));
 
   function check() {
     const wh = window.innerHeight;
-    document.querySelectorAll('.reveal, .section-title').forEach(el => {
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .section-title').forEach(el => {
       if (el.getBoundingClientRect().top < wh - 60) {
         el.classList.add('visible');
       }
     });
+
+    // Timeline line grow
+    const timeline = document.querySelector('.timeline');
+    if (timeline && timeline.getBoundingClientRect().top < wh - 100) {
+      timeline.classList.add('line-visible');
+    }
   }
 
   window.addEventListener('scroll', check);
@@ -559,6 +582,9 @@ function initStatCounter() {
 
 // ── Apple-style scroll animations ────────────────────────────────
 function initScrollAnimations() {
+  // Disable on small/old devices (720p, 5.5" screens ≤ 375px)
+  if (window.innerWidth <= 375) return;
+
   const heroContent = document.querySelector('.hero-content');
   const heroGrid = document.querySelector('.hero-bg-grid');
   const scrollIndicator = document.querySelector('.scroll-indicator');
@@ -648,6 +674,50 @@ function initSmoothScroll() {
       e.preventDefault();
       const target = document.querySelector(this.getAttribute('href'));
       if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+// ── 3D tilt effect on cards (desktop only) ──────────────────────
+function initCardTilt() {
+  if (window.innerWidth <= 768) return;
+
+  const cards = document.querySelectorAll('.project-card, .edu-card, .stat-card, .skill-category');
+
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = (y - centerY) / centerY * -6;
+      const rotateY = (x - centerX) / centerX * 6;
+      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+}
+
+// ── Magnetic hover on buttons ───────────────────────────────────
+function initMagneticButtons() {
+  if (window.innerWidth <= 768) return;
+
+  const buttons = document.querySelectorAll('.btn');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = 'translate(0, 0)';
     });
   });
 }
