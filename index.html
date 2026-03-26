@@ -13,6 +13,9 @@
 </head>
 <body>
 
+  <!-- Vanta.js Waves Background -->
+  <div id="vanta-bg"></div>
+
   <!-- Navigation -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
@@ -55,6 +58,7 @@
 
   <!-- About -->
   <section class="section" id="about">
+    <div class="vanta-section-bg" id="vanta-about"></div>
     <div class="container">
       <h2 class="section-title">About Me</h2>
       <div class="about-grid">
@@ -66,6 +70,7 @@
 
   <!-- Experience -->
   <section class="section section-alt" id="experience">
+    <div class="vanta-section-bg" id="vanta-experience"></div>
     <div class="container">
       <h2 class="section-title">Experience</h2>
       <div class="timeline" id="timeline"></div>
@@ -74,6 +79,7 @@
 
   <!-- Projects -->
   <section class="section" id="projects">
+    <div class="vanta-section-bg" id="vanta-projects"></div>
     <div class="container">
       <h2 class="section-title">Featured Projects</h2>
       <div class="projects-grid" id="projectsGrid"></div>
@@ -82,6 +88,7 @@
 
   <!-- Skills -->
   <section class="section section-alt" id="skills">
+    <div class="vanta-section-bg" id="vanta-skills"></div>
     <div class="container">
       <h2 class="section-title">Skills & Tools</h2>
       <div class="skills-grid" id="skillsGrid"></div>
@@ -90,6 +97,7 @@
 
   <!-- Education -->
   <section class="section" id="education">
+    <div class="vanta-section-bg" id="vanta-education"></div>
     <div class="container">
       <h2 class="section-title">Education</h2>
       <div class="education-grid" id="educationGrid"></div>
@@ -100,6 +108,7 @@
 
   <!-- Contact -->
   <section class="section section-alt" id="contact">
+    <div class="vanta-section-bg" id="vanta-contact"></div>
     <div class="container">
       <h2 class="section-title" id="contactHeading"></h2>
       <div class="contact-content">
@@ -116,7 +125,19 @@
     </div>
   </footer>
 
+  <!-- Vanta.js Dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.dots.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.rings.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+
   <!-- Modular Scripts -->
+  <script src="js/vanta-bg.js"></script>
   <script src="js/data.js"></script>
   <script src="js/icons.js"></script>
   <script src="js/hero.js"></script>

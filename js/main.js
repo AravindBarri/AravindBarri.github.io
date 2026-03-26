@@ -34,6 +34,7 @@ function initPortfolio() {
   initCardTilt();
   initMagneticButtons();
   initMouseEffects();
+  initVantaBackground();
 }
 
 // ── GO! ──────────────────────────────────────────────────────────
